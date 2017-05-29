@@ -22,13 +22,26 @@ class BarChart extends Component {
    }
 
    createBarChart() {
-      const dataMax = max(this.props.data.ethnicity.map(d => d.value))
-      const barWidth = this.props.size[0] / this.props.data.ethnicity.length
+      let dataSrc;
+
+      if (this.props.neighb !== undefined) {
+         if (this.props.neighb.ethnicity !== undefined) {
+            // a neighborhood has been selected
+            dataSrc = this.props.neighb.ethnicity
+         } else {
+            dataSrc = this.props.data.ethnicity
+         }
+      } else {
+         dataSrc = this.props.data.ethnicity
+      }
+
+      const dataMax = max(dataSrc.map(d => d.value))
+      const barWidth = this.props.size[0] / dataSrc.length
       const yScale = scaleLinear()
          .domain([0, dataMax])
          .range([0, this.props.size[1]])
 
-      const bars = this.props.data.ethnicity.map((d, i) => 
+      const bars = dataSrc.map((d, i) => 
          <rect
             key={'rect' + i}
             fill={this.props.colorScale(d.name)}

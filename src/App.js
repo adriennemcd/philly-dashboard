@@ -66,9 +66,12 @@ class App extends Component {
   }
 
   onMapClick(neighb) {
-    //format data of selected neighborhood
+    // map data of selected neighb to object
     let selection = {}
-    let totalPop = neighb.properties.tot_race
+
+    // if there is no pop, make total 1 to avoid NaN error when creating %
+    let totalPop = neighb.properties.tot_race === 0 ? 1 : neighb.properties.tot_race
+
     selection.name = neighb.properties.mapname
     selection.ethnicity = []
     selection.ethnicity.push({'name': 'African-American','value': neighb.properties.race_aa/totalPop})
@@ -83,8 +86,6 @@ class App extends Component {
     const colorScale = scaleOrdinal()
       .domain(['African-American','White','Hispanic/Latinx','Asian','Other'])
       .range(['#0EDD93', '#17AAA1', '#2077B0', '#2944BF', '#3312CE'])
-
-
 
     return (
       <div className="App">
@@ -106,8 +107,7 @@ class App extends Component {
               data={this.state.philly} 
               size={[this.state.screenWidth / 3, this.state.screenHeight / 2]}
               neighb={this.state.selectedNeighb} /> : null
-            }
-          {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 3, this.state.screenHeight / 2]} /> : null}
+          }
         </div>
       </div>
     )
