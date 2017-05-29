@@ -20,7 +20,7 @@ class PhillyMap extends Component {
 			<Neighborhood
 				key={"path" + i}
 				d={pathGenerator(d)}
-				dataSelected={this.props.neighb === d.properties.mapname}
+				dataSelected={this.props.neighb.name === d.properties.mapname}
 				className="neighborhood"
 				onClick={this.props.onClick.bind(this, d)}
 			/>

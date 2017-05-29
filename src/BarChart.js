@@ -22,7 +22,6 @@ class BarChart extends Component {
    }
 
    createBarChart() {
-      const node = this.node
       const dataMax = max(this.props.data.ethnicity.map(d => d.value))
       const barWidth = this.props.size[0] / this.props.data.ethnicity.length
       const yScale = scaleLinear()
@@ -41,20 +40,7 @@ class BarChart extends Component {
          />
       );
 
-      // select(node)
-      //    .selectAll("g.legend")
-      //    .data(this.props.colorScale)
-      //    .enter()
-      //    .append("g")
-      //    .attr("class", "legend")
-      //    .call(legend)
-      
-      // select(node)
-      //    .select("g.legend")
-      //    .attr("transform", "translate(" + (this.props.size[0] - 100) + ", 20)")
-
       return bars
-
    }
 
    createLegend() {
@@ -65,19 +51,16 @@ class BarChart extends Component {
       const legendItem = this.props.data.ethnicity.map((d, i) =>
          <g
             key={'legendItem' + i}
-            transform={"translate(" + (this.props.size[0] - 100) + "," + i*22 + ")"}
-         >
+            transform={"translate(" + (this.props.size[0] - 100) + "," + i*22 + ")"}>
             <rect
                key={'legendSwatch' + i}
                fill={this.props.colorScale(d.name)}
                width='18'
-               height='18'
-            />
+               height='18'/>
             <text 
                key={'legendText' + i}
                x='25'
-               y='14'
-            >
+               y='14'>
                {d.name}
             </text>
          </g>
@@ -87,11 +70,9 @@ class BarChart extends Component {
    }
 
 render() {
-      return <svg ref={node => this.node = node}
-         width={this.props.size[0]}   
-         height={this.props.size[1]}>
-            {this.createBarChart()}
-            {this.createLegend()}
+      return <svg width={this.props.size[0]} height={this.props.size[1]}>
+         {this.createBarChart()}
+         {this.createLegend()}
       </svg>
    }
 }

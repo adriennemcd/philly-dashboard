@@ -12,7 +12,7 @@ class App extends Component {
     this.state = { 
       screenWidth: 1000, 
       screenHeight: 500,
-      selectedNeighb: '',
+      selectedNeighb: {},
       philly: {
         name: 'Philadelphia',
         ethnicity: [
@@ -66,7 +66,17 @@ class App extends Component {
   }
 
   onMapClick(neighb) {
-    this.setState({selectedNeighb: neighb.properties.mapname})
+    //format data of selected neighborhood
+    let selection = {}
+    let totalPop = neighb.properties.tot_race
+    selection.name = neighb.properties.mapname
+    selection.ethnicity = []
+    selection.ethnicity.push({'name': 'African-American','value': neighb.properties.race_aa/totalPop})
+    selection.ethnicity.push({'name': 'White','value': neighb.properties.race_w/totalPop})
+    selection.ethnicity.push({'name': 'Hispanic/Latinx','value': neighb.properties.race_hl/totalPop})
+    selection.ethnicity.push({'name': 'Asian','value': neighb.properties.race_as/totalPop})
+    selection.ethnicity.push({'name': 'Other','value': neighb.properties.race_o/totalPop})
+    this.setState({selectedNeighb: selection})
   }
 
   render() {
@@ -90,7 +100,13 @@ class App extends Component {
               onClick={this.onMapClick} 
               neighb={this.state.selectedNeighb} /> : null
           }
-          {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 3, this.state.screenHeight / 2]} /> : null}
+          {this.state.data !== undefined ? 
+            <BarChart 
+              colorScale={colorScale} 
+              data={this.state.philly} 
+              size={[this.state.screenWidth / 3, this.state.screenHeight / 2]}
+              neighb={this.state.selectedNeighb} /> : null
+            }
           {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 3, this.state.screenHeight / 2]} /> : null}
         </div>
       </div>
