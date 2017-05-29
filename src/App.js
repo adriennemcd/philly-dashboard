@@ -9,10 +9,10 @@ import { geoCentroid } from 'd3-geo'
 class App extends Component {
   constructor(props){
     super(props)
-    this.onResize = this.onResize.bind(this)
     this.state = { 
       screenWidth: 1000, 
       screenHeight: 500,
+      selectedNeighb: '',
       philly: {
         name: 'Philadelphia',
         ethnicity: [
@@ -38,6 +38,9 @@ class App extends Component {
         ]
       }
     }
+
+    this.onResize = this.onResize.bind(this)
+    this.onMapClick = this.onMapClick.bind(this)
   }
 
   componentDidMount() {
@@ -62,10 +65,16 @@ class App extends Component {
     screenHeight: window.innerHeight - 70 }) // height of header
   }
 
+  onMapClick(neighb) {
+    this.setState({selectedNeighb: neighb.properties.mapname})
+  }
+
   render() {
     const colorScale = scaleOrdinal()
       .domain(['African-American','White','Hispanic/Latinx','Asian','Other'])
       .range(['#0EDD93', '#17AAA1', '#2077B0', '#2944BF', '#3312CE'])
+
+
 
     return (
       <div className="App">
@@ -73,9 +82,16 @@ class App extends Component {
           <h2>Philly Neighborhood Dashboard</h2>
         </div>
         <div>
-          {this.state.data !== undefined ? <PhillyMap colorScale={colorScale} data={this.state.data} size={[this.state.screenWidth / 2, this.state.screenHeight / 2]} /> : null}
-          {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 2, this.state.screenHeight / 2]} /> : null}
-          
+          {this.state.data !== undefined ? 
+            <PhillyMap 
+              colorScale={colorScale} 
+              data={this.state.data} 
+              size={[this.state.screenWidth / 2, this.state.screenHeight]} 
+              onClick={this.onMapClick} 
+              neighb={this.state.selectedNeighb} /> : null
+          }
+          {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 3, this.state.screenHeight / 2]} /> : null}
+          {this.state.data !== undefined ? <BarChart colorScale={colorScale} data={this.state.philly} size={[this.state.screenWidth / 3, this.state.screenHeight / 2]} /> : null}
         </div>
       </div>
     )

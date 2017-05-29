@@ -66,8 +66,6 @@ class BarChart extends Component {
          <g
             key={'legendItem' + i}
             transform={"translate(" + (this.props.size[0] - 100) + "," + i*22 + ")"}
-            // height='18'
-            // width='50'
          >
             <rect
                key={'legendSwatch' + i}
